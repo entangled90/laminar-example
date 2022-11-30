@@ -20,7 +20,7 @@ object Main extends App {
   } yield base + term).toVector
 
   EventStream
-    .periodic(1)
+    .periodic(10000)
     .foreach(_ =>
       positions.set(
         pairs

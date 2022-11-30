@@ -21,7 +21,9 @@ object LiveDashboard {
     implicit val ord: Ordering[HedgingMode] = Ordering.by(_.value)
 
     def options(current: HedgingMode) =
-      HedgingMode.values.map(o => option(o.toString()))
+      HedgingMode.values.map(o =>
+        option(o.toString(), selected := o == current)
+      )
   }
 
   final case class Position(
@@ -42,10 +44,11 @@ object LiveDashboard {
           select(
             HedgingMode.options(hedgingMode),
             onChange --> { el =>
-              val index =
-                el.target.asInstanceOf[dom.HTMLSelectElement].selectedIndex
-              val value = HedgingMode.withValue(index)
-              println(s"changed to ${value}")
+              el.target match {
+                case tgt: dom.HTMLSelectElement =>
+                  val value = HedgingMode.withValue(tgt.selectedIndex)
+                  dom.window.alert(s"changed to ${value}")
+              }
             }
           )
         )
